@@ -1,3 +1,7 @@
+# udemy-fastapi-reservation
+
+Docker環境とPoetry仮想環境の実行方法を記載
+
 ## Docker環境実行
 ### 環境変数
 `frontend`と`backend`の`src/.env`の環境変数を設定
@@ -60,6 +64,7 @@ BACKEND_URL=http://localhost:8000
 ### 環境構築
 新しいディレクトリを使用するとき`frontend`と`backend`のディレクトリで仮想環境を構築する
 ```sh
+pyenv local 3.9.13
 poetry install
 ```
 
