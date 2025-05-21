@@ -1,0 +1,66 @@
+services:
+  postgres:
+    image: postgres:14.3
+    container_name: postgres
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - default
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=reservation
+      - POSTGRES_INITDB_ARGS="--encoding=UTF-8"
+    ports:
+      - 5432:5432
+    hostname: postgres
+    restart: always
+    stdin_open: true
+
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    restart: "no"
+    volumes:
+      - ./frontend/src:/opt/src
+    networks:
+      - default
+    # environment:
+    #   - POSTGRES_HOST=postgres
+    #   - POSTGRES_PORT=5432
+    #   - POSTGRES_USER=postgres
+    #   - POSTGRES_PASSWORD=password
+    #   - POSTGRES_DBNAME=reservation
+    ports:
+      - 8501:8501
+    command: /bin/sh -c "sleep 3s && streamlit run src/main.py --server.address=0.0.0.0"
+    depends_on:
+      - postgres
+
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: "no"
+    volumes:
+      - ./backend/src:/opt/src
+    networks:
+      - default
+    # environment:
+    #   - POSTGRES_HOST=postgres
+    #   - POSTGRES_PORT=5432
+    #   - POSTGRES_USER=postgres
+    #   - POSTGRES_PASSWORD=password
+    #   - POSTGRES_DBNAME=reservation
+    ports:
+      - 8000:8000
+    command: /bin/sh -c "sleep 3s && uvicorn src.main:app --host=0.0.0.0 --reload"
+    depends_on:
+      - postgres
+
+networks:
+  default:
+    name: reservation
