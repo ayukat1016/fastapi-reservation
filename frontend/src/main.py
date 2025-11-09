@@ -81,7 +81,10 @@ elif page == 'bookings':
 
     st.write('### 会議室一覧')
     df_rooms = pd.DataFrame(rooms)
-    df_rooms.columns = ['会議室名', '定員', '会議室ID']
+    if len(df_rooms) > 0:
+        df_rooms.columns = ['会議室名', '定員', '会議室ID']
+    else:
+        df_rooms = pd.DataFrame(columns=['会議室名', '定員', '会議室ID'])
     st.table(df_rooms)
 
     url_bookings = f"{BACKEND_URL}/bookings"
@@ -101,24 +104,27 @@ elif page == 'bookings':
         }
 
     # IDを各値に変更
-    to_username = lambda x: users_id[x]
-    to_room_name = lambda x: rooms_id[x]['room_name']
-    to_datetime = lambda x: datetime.datetime.fromisoformat(x).strftime('%Y/%m/%d %H:%M')
+    if len(df_bookings) > 0:
+        to_username = lambda x: users_id[x]
+        to_room_name = lambda x: rooms_id[x]['room_name']
+        to_datetime = lambda x: datetime.datetime.fromisoformat(x).strftime('%Y/%m/%d %H:%M')
 
-    # 特定の列に適用
-    df_bookings['user_id'] = df_bookings['user_id'].map(to_username)
-    df_bookings['room_id'] = df_bookings['room_id'].map(to_room_name)
-    df_bookings['start_datetime'] = df_bookings['start_datetime'].map(to_datetime)
-    df_bookings['end_datetime'] = df_bookings['end_datetime'].map(to_datetime)
+        # 特定の列に適用
+        df_bookings['user_id'] = df_bookings['user_id'].map(to_username)
+        df_bookings['room_id'] = df_bookings['room_id'].map(to_room_name)
+        df_bookings['start_datetime'] = df_bookings['start_datetime'].map(to_datetime)
+        df_bookings['end_datetime'] = df_bookings['end_datetime'].map(to_datetime)
 
-    df_bookings = df_bookings.rename(columns={
-        'user_id': '予約者名',
-        'room_id': '会議室名',
-        'booked_num': '予約人数',
-        'start_datetime': '開始時刻',
-        'end_datetime': '終了時刻',
-        'booking_id': '予約番号'
-    })
+        df_bookings = df_bookings.rename(columns={
+            'user_id': '予約者名',
+            'room_id': '会議室名',
+            'booked_num': '予約人数',
+            'start_datetime': '開始時刻',
+            'end_datetime': '終了時刻',
+            'booking_id': '予約番号'
+        })
+    else:
+        df_bookings = pd.DataFrame(columns=['予約者名', '会議室名', '予約人数', '開始時刻', '終了時刻', '予約番号'])
     st.write('### 予約一覧')
     st.table(df_bookings)
 
