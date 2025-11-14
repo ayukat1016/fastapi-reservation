@@ -28,12 +28,6 @@ services:
       - ./frontend/src:/opt/src
     networks:
       - default
-    # environment:
-    #   - POSTGRES_HOST=postgres
-    #   - POSTGRES_PORT=5432
-    #   - POSTGRES_USER=postgres
-    #   - POSTGRES_PASSWORD=password
-    #   - POSTGRES_DBNAME=reservation
     ports:
       - 8501:8501
     command: /bin/sh -c "sleep 3s && streamlit run src/main.py --server.address=0.0.0.0"
@@ -51,12 +45,12 @@ services:
       - ./backend/src:/opt/src
     networks:
       - default
-    # environment:
-    #   - POSTGRES_HOST=postgres
-    #   - POSTGRES_PORT=5432
-    #   - POSTGRES_USER=postgres
-    #   - POSTGRES_PASSWORD=password
-    #   - POSTGRES_DBNAME=reservation
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DBNAME=reservation
     ports:
       - 8000:8000
     command: /bin/sh -c "sleep 3s && uvicorn src.main:app --host=0.0.0.0 --reload"

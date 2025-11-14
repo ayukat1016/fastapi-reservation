@@ -14,8 +14,13 @@ if USE_SQLITE:
     SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
     connect_args = {"check_same_thread": False}
 else:
-    # Docker/Poetry両対応のため、URLを .env に設定
-    SQLALCHEMY_DATABASE_URL = os.getenv("POSTGRES_URL")
+    # docker-compose.yamlの環境変数からURLを構築
+    postgres_host = os.getenv("POSTGRES_HOST", "postgres")
+    postgres_port = os.getenv("POSTGRES_PORT", "5432")
+    postgres_user = os.getenv("POSTGRES_USER", "postgres")
+    postgres_password = os.getenv("POSTGRES_PASSWORD", "password")
+    postgres_dbname = os.getenv("POSTGRES_DBNAME", "reservation")
+    SQLALCHEMY_DATABASE_URL = f"postgresql://{postgres_user}:{postgres_password}@{postgres_host}:{postgres_port}/{postgres_dbname}"
     connect_args = {}
 
 # エンジンとセッション

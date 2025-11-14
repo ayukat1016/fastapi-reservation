@@ -1,6 +1,7 @@
-# udemy-fastapi-reservation
+# fastapi-reservation
 
-Docker環境とPoetry仮想環境の実行方法を記載
+- 本リポジトリはフロンドエンドに`streamlit`、バックエンドに`FastAPI`、データベースに`Postgres`を使ったハンズオン用の会議室予約アプリです
+- Docker環境とPoetry仮想環境の実行方法と操作方法を記載
 
 ## Docker環境実行
 ### 環境変数
@@ -39,6 +40,13 @@ docker compose up -d
 ```sh
 docker compose down
 ```
+
+#### フロントエンドのURL
+http://localhost:8501
+
+#### APIエンドポイント
+http://localhost:8000/docs
+
 
 #### DB操作
 ```sh

@@ -178,7 +178,8 @@ elif page == 'bookings':
                 data=json.dumps(data)
             )
             if res.status_code == 200:
-                st.success('予約完了しました')            
+                st.success('予約完了しました')
+                st.rerun()  # ページを再実行して予約一覧を自動更新
             elif res.status_code == 404 and res.json()['detail'] == 'Already booked' :
                 st.error('指定の時間にはすでに予約が入っています。')
 
